@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  font-family: "Georgia", serif;
+  background: linear-gradient(#fdf6e3, #f5e6c8);
+  color: #4b3b2a;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.subtitle {
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: 2px solid #d4b483;
+  background: #fffaf0;
+  resize: vertical;
+}
+
+button {
+  display: block;
+  margin: 1.5rem auto;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: #c97c5d;
+  color: white;
+}
+
+button:hover {
+  background: #b86b4c;
+}
+
+.page {
+  background: #fffaf0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.page img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
