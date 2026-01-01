@@ -3,27 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" />
-    <title>Storybook-Illustartor Homepage</title>
+    <title>✨ Magical Storybook Illustrator ✨</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1>Storybook Illustrator</h1>
-    <p class="subtitle">Turn your stories into magical picture books</p>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    
+    <div class="container">
+        <!-- Magical Header -->
+        <header class="header">
+            <div class="magic-wand">✨</div>
+            <h1 class="title">
+                <span class="title-icon">📖</span>
+                Magical Storybook
+                <span class="title-icon">🌟</span>
+            </h1>
+            <p class="subtitle">Transform your stories into illustrated adventures!</p>
+            <div class="sparkles">
+                <span>✨</span>
+                <span>🌙</span>
+                <span>⭐</span>
+                <span>💫</span>
+                <span>🌟</span>
+            </div>
+        </header>
 
-    <textarea
-      id="storyInput"
-      placeholder="Once upon a time..."
-      rows="8"
-    ></textarea>
+        <!-- Story Creation Form -->
+        <div id="inputForm" class="story-form">
+            <div class="form-card">
+                <div class="card-header">
+                    <h2>📝 Create Your Story</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="titleInput">
+                        <span class="label-icon">🎪</span>
+                        Story Title
+                    </label>
+                    <input 
+                        type="text" 
+                        id="titleInput" 
+                        value="My Magical Adventure"
+                        placeholder="Once Upon a Time..."
+                        class="magic-input"
+                    >
+                </div>
 
-    <button id="generateBtn"> Generate Storybook</button>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label>
+                            <span class="label-icon">📚</span>
+                            Your Magical Story
+                        </label>
+                        <button onclick="loadExample()" class="example-btn">
+                            🎭 Load Example
+                        </button>
+                    </div>
+                    <textarea 
+                        id="storyInput" 
+                        rows="12"
+                        placeholder="Write your magical story here...
 
-    <div id="status"></div>
+Separate each page with a blank line (press Enter twice).
 
-    <div id="storybook"></div>
-  </div>
+For example:
+Once upon a time in a magical forest...
 
-  <script src="script.js"></script>
+The brave hero discovered a secret...
+
+And they lived happily ever after!"
+                        class="magic-textarea"
+                    ></textarea>
+                    <div class="tip-box">
+                        <span class="tip-icon">💡</span>
+                        <span>Tip: Separate pages with double line breaks. Maximum 15 pages!</span>
+                    </div>
+                </div>
+
+                <div id="errorMessage" class="error-message hidden">
+                    <span class="error-icon">❌</span>
+                    <p></p>
+                </div>
+
+                <button onclick="generateStorybook()" id="generateBtn" class="magic-button">
+                    <span class="btn-icon">🎨</span>
+                    <span class="btn-text">Create My Storybook</span>
+                    <span class="btn-sparkle">✨</span>
+                </button>
+
+                <div id="loadingMessage" class="loading-message hidden">
+                    <div class="loading-spinner"></div>
+                    <p>🌟 Creating your magical illustrations... This takes 15-30 seconds per page!</p>
+                    <div class="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Storybook Display -->
+        <div id="storybookDisplay" class="storybook-display hidden">
+            <!-- Success Header -->
+            <div class="success-card">
+                <div class="success-icon">🎉</div>
+                <div class="success-content">
+                    <h2 id="storybookTitle" class="storybook-title"></h2>
+                    <p id="storybookInfo" class="storybook-info"></p>
+                </div>
+                <button onclick="resetForm()" class="new-story-btn">
+                    🔮 Create Another Story
+                </button>
+            </div>
+
+            <!-- Page Navigation -->
+            <div class="navigation-card">
+                <button onclick="previousPage()" id="prevBtn" class="nav-btn prev-btn">
+                    <span class="nav-arrow">←</span>
+                    <span>Previous</span>
+                </button>
+                <div class="page-counter">
+                    <span id="pageCounter"></span>
+                </div>
+                <button onclick="nextPage()" id="nextBtn" class="nav-btn next-btn">
+                    <span>Next</span>
+                    <span class="nav-arrow">→</span>
+                </button>
+            </div>
+
+            <!-- Current Page Display -->
+            <div class="page-display">
+                <div class="illustration-section">
+                    <h3 class="section-title">
+                        <span class="section-icon">🎨</span>
+                        Illustration
+                    </h3>
+                    <div id="currentImage" class="image-frame"></div>
+                </div>
+                <div class="story-section">
+                    <h3 class="section-title">
+                        <span class="section-icon">📖</span>
+                        Story Text
+                    </h3>
+                    <div class="story-text-box">
+                        <p id="currentText"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thumbnail Gallery -->
+            <div class="gallery-card">
+                <h3 class="gallery-title">
+                    <span class="gallery-icon">🖼️</span>
+                    All Pages
+                </h3>
+                <div id="thumbnailGallery" class="thumbnail-grid"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>✨ Made with magic and AI ✨</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
