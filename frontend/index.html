@@ -3,172 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ Magical Storybook Illustrator ✨</title>
+    <title>Storybook Illustrator ✨</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="twinkling"></div>
-    
-    <div class="container">
-        <!-- Magical Header -->
-        <header class="header">
-            <div class="magic-wand">✨</div>
-            <h1 class="title">
-                <span class="title-icon">📖</span>
-                Magical Storybook
-                <span class="title-icon">🌟</span>
-            </h1>
-            <p class="subtitle">Transform your stories into illustrated adventures!</p>
-            <div class="sparkles">
-                <span>✨</span>
-                <span>🌙</span>
-                <span>⭐</span>
-                <span>💫</span>
-                <span>🌟</span>
-            </div>
-        </header>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>📚 Storybook Illustrator</h1>
+            <p class="subtitle">Transform your stories into beautifully illustrated books with AI</p>
+        </div>
+    </header>
 
-        <!-- Story Creation Form -->
-        <div id="inputForm" class="story-form">
-            <div class="form-card">
-                <div class="card-header">
-                    <h2>📝 Create Your Story</h2>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Input Section -->
+        <section class="input-section">
+            <div class="card">
+                <h2>✍️ Write Your Story</h2>
+                <p class="hint">Separate each page with a blank line (press Enter twice)</p>
+                
+                <input 
+                    type="text" 
+                    id="storyTitle" 
+                    placeholder="Story Title (e.g., The Adventures of Luna)"
+                    class="title-input"
+                >
+                
+                <textarea 
+                    id="storyText" 
+                    placeholder="Once upon a time, there was a brave knight...
+
+The knight went on an adventure...
+
+And they lived happily ever after."
+                    rows="12"
+                ></textarea>
+                
+                <div class="button-group">
+                    <button id="generateBtn" class="btn btn-primary">
+                        🎨 Generate Storybook
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary">
+                        🗑️ Clear
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progressSection" class="progress-section hidden">
+            <div class="card">
+                <h2>⏳ Generating Your Storybook...</h2>
+                <div class="progress-info">
+                    <p id="progressText">Preparing...</p>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <p id="progressPages" class="progress-pages">Page 0 of 0</p>
+                </div>
+                <div class="loading-animation">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section hidden">
+            <div class="card">
+                <div class="results-header">
+                    <h2 id="resultsTitle">📖 Your Storybook</h2>
+                    <button id="newStoryBtn" class="btn btn-secondary">
+                        ➕ Create New Story
+                    </button>
                 </div>
                 
-                <div class="form-group">
-                    <label for="titleInput">
-                        <span class="label-icon">🎪</span>
-                        Story Title
-                    </label>
-                    <input 
-                        type="text" 
-                        id="titleInput" 
-                        value="My Magical Adventure"
-                        placeholder="Once Upon a Time..."
-                        class="magic-input"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row">
-                        <label>
-                            <span class="label-icon">📚</span>
-                            Your Magical Story
-                        </label>
-                        <button onclick="loadExample()" class="example-btn">
-                            🎭 Load Example
-                        </button>
-                    </div>
-                    <textarea 
-                        id="storyInput" 
-                        rows="12"
-                        placeholder="Write your magical story here...
-
-Separate each page with a blank line (press Enter twice).
-
-For example:
-Once upon a time in a magical forest...
-
-The brave hero discovered a secret...
-
-And they lived happily ever after!"
-                        class="magic-textarea"
-                    ></textarea>
-                    <div class="tip-box">
-                        <span class="tip-icon">💡</span>
-                        <span>Tip: Separate pages with double line breaks. Maximum 15 pages!</span>
-                    </div>
-                </div>
-
-                <div id="errorMessage" class="error-message hidden">
-                    <span class="error-icon">❌</span>
-                    <p></p>
-                </div>
-
-                <button onclick="generateStorybook()" id="generateBtn" class="magic-button">
-                    <span class="btn-icon">🎨</span>
-                    <span class="btn-text">Create My Storybook</span>
-                    <span class="btn-sparkle">✨</span>
-                </button>
-
-                <div id="loadingMessage" class="loading-message hidden">
-                    <div class="loading-spinner"></div>
-                    <p>🌟 Creating your magical illustrations... This takes 15-30 seconds per page!</p>
-                    <div class="loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+                <div id="storybookPages" class="storybook-pages">
+                    <!-- Pages will be inserted here by JavaScript -->
                 </div>
             </div>
+        </section>
+
+        <!-- Error Section -->
+        <section id="errorSection" class="error-section hidden">
+            <div class="card error-card">
+                <h2>❌ Oops! Something went wrong</h2>
+                <p id="errorMessage" class="error-message"></p>
+                <button id="tryAgainBtn" class="btn btn-primary">
+                    🔄 Try Again
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Powered by Pollinations.ai 🌟 | Built with FastAPI & ❤️</p>
         </div>
-
-        <!-- Storybook Display -->
-        <div id="storybookDisplay" class="storybook-display hidden">
-            <!-- Success Header -->
-            <div class="success-card">
-                <div class="success-icon">🎉</div>
-                <div class="success-content">
-                    <h2 id="storybookTitle" class="storybook-title"></h2>
-                    <p id="storybookInfo" class="storybook-info"></p>
-                </div>
-                <button onclick="resetForm()" class="new-story-btn">
-                    🔮 Create Another Story
-                </button>
-            </div>
-
-            <!-- Page Navigation -->
-            <div class="navigation-card">
-                <button onclick="previousPage()" id="prevBtn" class="nav-btn prev-btn">
-                    <span class="nav-arrow">←</span>
-                    <span>Previous</span>
-                </button>
-                <div class="page-counter">
-                    <span id="pageCounter"></span>
-                </div>
-                <button onclick="nextPage()" id="nextBtn" class="nav-btn next-btn">
-                    <span>Next</span>
-                    <span class="nav-arrow">→</span>
-                </button>
-            </div>
-
-            <!-- Current Page Display -->
-            <div class="page-display">
-                <div class="illustration-section">
-                    <h3 class="section-title">
-                        <span class="section-icon">🎨</span>
-                        Illustration
-                    </h3>
-                    <div id="currentImage" class="image-frame"></div>
-                </div>
-                <div class="story-section">
-                    <h3 class="section-title">
-                        <span class="section-icon">📖</span>
-                        Story Text
-                    </h3>
-                    <div class="story-text-box">
-                        <p id="currentText"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Thumbnail Gallery -->
-            <div class="gallery-card">
-                <h3 class="gallery-title">
-                    <span class="gallery-icon">🖼️</span>
-                    All Pages
-                </h3>
-                <div id="thumbnailGallery" class="thumbnail-grid"></div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>✨ Made with magic and AI ✨</p>
-        </footer>
-    </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

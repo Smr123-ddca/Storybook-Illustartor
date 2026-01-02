@@ -9,7 +9,8 @@ from PIL import Image
 from io import BytesIO
 import urllib.parse
 import time
-
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 # Load environment variables
 load_dotenv()
@@ -19,6 +20,18 @@ app = FastAPI(
     title="Storybook Illustrator",
     description="Generatinh AI illustrations for stories ",
 )
+
+
+# ADD THIS - Enable CORS for frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins (for development)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 def generate_image(prompt: str, filename: str) -> str:
     # Make prompt URL-safe
@@ -316,31 +329,4 @@ def create_detailed_prompt(page_text: str, page_number: int, total_pages: int) -
     
     return prompt
 
-@app.get("/images/{filename}")
-def get_image(filename: str):
-    """
-    View a generated image in the browser.
-    
-    After generating a storybook, view images at:
-    http://localhost:8000/images/page_1.png
-    """
-    
-    filepath = f"images/{filename}"
-    
-    if not os.path.exists(filepath):
-        raise HTTPException(
-            status_code=404,
-            detail=f"Image {filename} not found"
-        )
-    
-    return FileResponse(filepath)
 
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
