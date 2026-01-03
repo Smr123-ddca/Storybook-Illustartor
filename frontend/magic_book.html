@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Storybook Illustrator ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        /* ==================== WHIMSICAL STYLING ==================== */
+        :root {
+            --primary: #8e44ad;
+            --secondary: #f39c12;
+            --bg-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            --parchment: #fffdf0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+
+        /* Floating Background Elements */
+        .magical-bg { position: fixed; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .cloud, .star { position: absolute; opacity: 0.6; animation: float 10s infinite ease-in-out; }
+        .cloud { font-size: 3rem; }
+        .star { font-size: 2rem; color: #fff; text-shadow: 0 0 10px gold; }
+        .c1 { top: 10%; left: 5%; animation-duration: 15s; }
+        .c2 { top: 20%; right: 10%; animation-duration: 18s; }
+        .s1 { top: 60%; left: 15%; animation: twinkle 3s infinite; }
+        .s2 { top: 15%; left: 50%; animation: twinkle 4s infinite; }
+
+        @keyframes float { 50% { transform: translateY(-20px); } }
+        @keyframes twinkle { 50% { opacity: 1; transform: scale(1.2); } }
+
+        /* Layout */
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+        
+        .hero { text-align: center; margin-bottom: 3rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .hero h1 { font-family: 'Fredoka One', cursive; font-size: 3.5rem; letter-spacing: 2px; }
+
+        /* Card Styling */
+        .card {
+            background: var(--parchment);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 8px solid #fff;
+            position: relative;
+        }
+
+        .input-group { margin-bottom: 1.5rem; }
+        label { display: block; font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: bold; }
+        
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 3px solid #e0d8f0;
+            border-radius: 12px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            transition: 0.3s;
+        }
+        input:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(142,68,173,0.2); }
+
+        /* Magic Button */
+        .magic-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(45deg, #8e44ad, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(142,68,173,0.4);
+        }
+        .magic-btn:hover { transform: translateY(-3px) scale(1.02); }
+        .magic-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+        /* Loading State */
+        .crystal-ball {
+            width: 100px; height: 100px;
+            background: radial-gradient(circle at 30% 30%, #a9dce8, #74b9ff);
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            box-shadow: 0 0 30px #74b9ff;
+            position: relative;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow { from { box-shadow: 0 0 20px #74b9ff; } to { box-shadow: 0 0 40px #74b9ff, 0 0 10px white; } }
+
+        .progress-bar { width: 100%; height: 20px; background: #ddd; border-radius: 10px; overflow: hidden; margin-top: 1rem; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #f1c40f, #e67e22); width: 0%; transition: width 0.3s; }
+
+        /* Results */
+        .page-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            animation: popIn 0.6s ease-out;
+        }
+        @keyframes popIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .page-image { width: 100%; display: block; min-height: 200px; background: #f0f0f0; }
+        .page-text { padding: 2rem; font-size: 1.4rem; line-height: 1.6; text-align: center; border-top: 5px solid var(--secondary); }
+        .page-num { display: inline-block; background: var(--secondary); color: white; padding: 0.2rem 1rem; border-radius: 20px; margin-bottom: 1rem; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="magical-bg">
+        <div class="cloud c1">☁️</div>
+        <div class="cloud c2">☁️</div>
+        <div class="star s1">✨</div>
+        <div class="star s2">✨</div>
+    </div>
+
+    <main class="container">
+        <header class="hero">
+            <h1>🧚 Storybook Illustrator</h1>
+            <p>Where your words become magic pictures!</p>
+        </header>
+
+        <section id="inputSection" class="card">
+            <div style="text-align: center; font-size: 3rem; margin-bottom: 1rem;">✒️</div>
+            <div class="input-group">
+                <label>Story Title</label>
+                <input type="text" id="storyTitle" placeholder="The Magical Adventure...">
+            </div>
+            <div class="input-group">
+                <label>Your Story (Separate pages with blank lines)</label>
+                <textarea id="storyText" rows="8" placeholder="Once upon a time...&#10;&#10;Then they went to the forest..."></textarea>
+            </div>
+            <button id="generateBtn" onclick="generateStory()" class="magic-btn">✨ Create Magic Book</button>
+        </section>
+
+        <section id="loadingSection" class="card hidden" style="text-align: center;">
+            <div class="crystal-ball"></div>
+            <h2>Conjuring Illustrations...</h2>
+            <p id="loadingText">Mixing potions...</p>
+            <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">(This might take 1-2 minutes. Please be patient!)</p>
+        </section>
+
+        <section id="resultsSection" class="hidden">
+            <h2 id="resultTitle" style="text-align: center; color: white; font-size: 3rem; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"></h2>
+            <div id="pagesContainer"></div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button onclick="location.reload()" class="magic-btn" style="width: auto; padding: 1rem 3rem;">🔄 Write Another Story</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+
+        async function generateStory() {
+            // 1. Get Input
+            const title = document.getElementById('storyTitle').value.trim() || "My Story";
+            const text = document.getElementById('storyText').value.trim();
+
+            if (!text) {
+                alert("Please write a story first!");
+                return;
+            }
+
+            // 2. Show Loading
+            document.getElementById('inputSection').classList.add('hidden');
+            document.getElementById('loadingSection').classList.remove('hidden');
+            updateProgress(10, "Waking up the artists...");
+
+            try {
+                // 3. Send Request
+                console.log("Sending request to backend...");
+                
+                const response = await fetch(`${API_URL}/generate-storybook?title=${encodeURIComponent(title)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ story_text: text })
+                });
+
+                updateProgress(50, "Painting the masterpieces...");
+
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.detail || "Server error");
+                }
+
+                const data = await response.json();
+                console.log("Data received:", data);
+
+                // 4. Show Results
+                updateProgress(100, "Finishing touches...");
+                setTimeout(() => displayResults(data), 500);
+
+            } catch (error) {
+                console.error(error);
+                alert("❌ The Magic Failed!\n\nReason: " + error.message + "\n\nTip: Make sure the backend window is running and 'images' folder exists!");
+                location.reload(); // Reset to let them try again
+            }
+        }
+
+        function displayResults(data) {
+            document.getElementById('loadingSection').classList.add('hidden');
+            const resultsSection = document.getElementById('resultsSection');
+            const container = document.getElementById('pagesContainer');
+            
+            document.getElementById('resultTitle').textContent = data.story_title;
+            container.innerHTML = ""; // Clear old pages
+            resultsSection.classList.remove('hidden');
+
+            // Loop through pages
+            data.images.forEach(page => {
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'page-card';
+
+                // Image logic (Fixed opacity bug)
+                let imgHtml = '';
+                if (page.image_filename && page.image_filename !== 'error') {
+                    // We use a timestamp to prevent caching old images with same name
+                    const imgSrc = `${API_URL}/images/${page.image_filename}?t=${new Date().getTime()}`;
+                    imgHtml = `<img src="${imgSrc}" class="page-image" alt="Story Illustration">`;
+                } else {
+                    imgHtml = `<div class="page-image" style="display:flex;align-items:center;justify-content:center;color:red;">Failed to load image</div>`;
+                }
+
+                pageDiv.innerHTML = `
+                    ${imgHtml}
+                    <div class="page-text">
+                        <span class="page-num">Page ${page.page_number}</span>
+                        <p>${page.page_text}</p>
+                    </div>
+                `;
+                container.appendChild(pageDiv);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress(percent, text) {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('loadingText').textContent = text;
+        }
+    </script>
+</body>
+</html>

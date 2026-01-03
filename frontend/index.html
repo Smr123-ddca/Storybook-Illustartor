@@ -3,105 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Storybook Illustrator ✨</title>
+    <title>Magical Storybook Illustrator ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <h1>📚 Storybook Illustrator</h1>
-            <p class="subtitle">Transform your stories into beautifully illustrated books with AI</p>
+    <div class="magical-bg">
+        <div class="cloud cloud-1">☁️</div>
+        <div class="cloud cloud-2">☁️</div>
+        <div class="star star-1">✨</div>
+        <div class="star star-2">✨</div>
+    </div>
+
+    <main class="book-container">
+        <header class="hero">
+            <h1>🧚 Storybook Illustrator</h1>
+            <p class="tagline">Where your words become magic pictures!</p>
+        </header>
+
+        <section id="inputSection" class="parchment-card">
+            <div class="ink-decoration">✒️</div>
+            <h2>Write Your Tale</h2>
+            <p class="instruction">Enter your story below. Leave a blank line between pages!</p>
+            
+            <div class="input-group">
+                <label>Story Title</label>
+                <input type="text" id="storyTitle" placeholder="e.g., The Dragon's Tea Party" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label>Once upon a time...</label>
+                <textarea id="storyText" rows="10" placeholder="Once there was a little bunny named Hop.
+
+Hop found a magic carrot in the garden.
+
+Suddenly, he could fly!"></textarea>
+            </div>
+
+            <button id="generateBtn" class="magic-btn">
+                <span class="btn-icon">🪄</span> Cast Spell (Generate)
+            </button>
+        </section>
+
+        <section id="loadingSection" class="hidden">
+            <div class="crystal-ball-container">
+                <div class="crystal-ball">
+                    <div class="magic-mist"></div>
+                </div>
+                <h3>Conjuring your illustrations...</h3>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressFill"></div>
+                </div>
+                <p id="progressText">Gathering pixie dust...</p>
+            </div>
+        </section>
+
+        <section id="resultsSection" class="hidden">
+            <div class="book-spine"></div>
+            <h2 id="resultTitleDisplay" class="story-title">Your Story</h2>
+            
+            <div id="storybookPages" class="pages-container">
+                </div>
+
+            <div class="actions">
+                <button id="resetBtn" class="secondary-btn">✨ Write Another Story</button>
+            </div>
+        </section>
+
+        <div id="errorToast" class="error-toast hidden">
+            <span id="errorMsg">Something went wrong!</span>
+            <button onclick="this.parentElement.classList.add('hidden')">✕</button>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Input Section -->
-        <section class="input-section">
-            <div class="card">
-                <h2>✍️ Write Your Story</h2>
-                <p class="hint">Separate each page with a blank line (press Enter twice)</p>
-                
-                <input 
-                    type="text" 
-                    id="storyTitle" 
-                    placeholder="Story Title (e.g., The Adventures of Luna)"
-                    class="title-input"
-                >
-                
-                <textarea 
-                    id="storyText" 
-                    placeholder="Once upon a time, there was a brave knight...
-
-The knight went on an adventure...
-
-And they lived happily ever after."
-                    rows="12"
-                ></textarea>
-                
-                <div class="button-group">
-                    <button id="generateBtn" class="btn btn-primary">
-                        🎨 Generate Storybook
-                    </button>
-                    <button id="clearBtn" class="btn btn-secondary">
-                        🗑️ Clear
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Progress Section -->
-        <section id="progressSection" class="progress-section hidden">
-            <div class="card">
-                <h2>⏳ Generating Your Storybook...</h2>
-                <div class="progress-info">
-                    <p id="progressText">Preparing...</p>
-                    <div class="progress-bar">
-                        <div id="progressFill" class="progress-fill"></div>
-                    </div>
-                    <p id="progressPages" class="progress-pages">Page 0 of 0</p>
-                </div>
-                <div class="loading-animation">
-                    <div class="spinner"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Results Section -->
-        <section id="resultsSection" class="results-section hidden">
-            <div class="card">
-                <div class="results-header">
-                    <h2 id="resultsTitle">📖 Your Storybook</h2>
-                    <button id="newStoryBtn" class="btn btn-secondary">
-                        ➕ Create New Story
-                    </button>
-                </div>
-                
-                <div id="storybookPages" class="storybook-pages">
-                    <!-- Pages will be inserted here by JavaScript -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Error Section -->
-        <section id="errorSection" class="error-section hidden">
-            <div class="card error-card">
-                <h2>❌ Oops! Something went wrong</h2>
-                <p id="errorMessage" class="error-message"></p>
-                <button id="tryAgainBtn" class="btn btn-primary">
-                    🔄 Try Again
-                </button>
-            </div>
-        </section>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>Powered by Pollinations.ai 🌟 | Built with FastAPI & ❤️</p>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
 </body>
