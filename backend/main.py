@@ -329,4 +329,38 @@ def create_detailed_prompt(page_text: str, page_number: int, total_pages: int) -
     
     return prompt
 
-
+@app.post("/generate-page")
+def generate_single_page(
+    page_text: str,
+    page_number: int,
+    total_pages: int = 1
+):
+    
+    try:
+        print(f"\n🎨 Generating page {page_number}/{total_pages}")
+        
+        # Create prompt
+        prompt = create_detailed_prompt(page_text, page_number, total_pages)
+        
+        # Generate image
+        filename = f"page_{page_number}.png"
+        generate_image(prompt, filename)
+        
+        print(f"✅ Page {page_number} complete!")
+        
+        return {
+            "success": True,
+            "page_number": page_number,
+            "page_text": page_text,
+            "image_filename": filename,
+            "image_path": f"images/{filename}"
+        }
+        
+    except Exception as e:
+        print(f"❌ Failed page {page_number}: {e}")
+        return {
+            "success": False,
+            "page_number": page_number,
+            "page_text": page_text,
+            "error": str(e)
+        }

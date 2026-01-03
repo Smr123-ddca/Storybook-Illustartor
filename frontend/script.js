@@ -32,55 +32,102 @@ async function generateStorybook() {
     const storyTitle = storyTitleInput.value.trim() || 'My Storybook';
     const storyText = storyTextArea.value.trim();
     
+    console.log('=== GENERATION STARTED ===');
+    
     // Validation
     if (!storyText) {
         alert('Please write a story first!');
         return;
     }
     
-    // Count pages
+    // Split into pages
     const pages = storyText.split('\n\n').filter(p => p.trim());
+    console.log('Pages found:', pages.length);
+    
     if (pages.length === 0) {
         alert('Please separate your story into pages using blank lines!');
         return;
     }
     
     if (pages.length > 15) {
-        alert(`Your story has ${pages.length} pages. Maximum is 15 pages. Try making your paragraphs longer!`);
+        alert(`Your story has ${pages.length} pages. Maximum is 15 pages.`);
         return;
     }
     
-    // Show progress section
+    // Show progress
     showSection('progress');
     updateProgress(0, pages.length, 'Starting generation...');
     
-    // Disable buttons
+    // Disable button
     generateBtn.disabled = true;
     
     try {
-        // Call API
-        const response = await fetch(`${API_BASE_URL}/generate-storybook?title=${encodeURIComponent(storyTitle)}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                story_text: storyText
-            })
-        });
+        // Generate pages ONE BY ONE
+        const generatedPages = [];
         
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Failed to generate storybook');
+        for (let i = 0; i < pages.length; i++) {
+            const pageNumber = i + 1;
+            const pageText = pages[i];
+            
+            console.log(`\n📄 Generating page ${pageNumber}/${pages.length}`);
+            updateProgress(i, pages.length, `Generating page ${pageNumber} of ${pages.length}...`);
+            
+            try {
+                // Call API for single page
+                const response = await fetch(
+                    `${API_BASE_URL}/generate-page?page_text=${encodeURIComponent(pageText)}&page_number=${pageNumber}&total_pages=${pages.length}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to generate page ${pageNumber}`);
+                }
+                
+                const pageData = await response.json();
+                console.log(`✅ Page ${pageNumber} response:`, pageData);
+                
+                generatedPages.push(pageData);
+                
+                // Update progress
+                updateProgress(pageNumber, pages.length, `Page ${pageNumber} complete!`);
+                
+                // Small delay between pages
+                if (i < pages.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+                
+            } catch (error) {
+                console.error(`❌ Error on page ${pageNumber}:`, error);
+                // Add error placeholder
+                generatedPages.push({
+                    success: false,
+                    page_number: pageNumber,
+                    page_text: pageText,
+                    error: error.message
+                });
+            }
         }
         
-        const data = await response.json();
+        // All pages generated!
+        console.log('=== ALL PAGES GENERATED ===');
+        updateProgress(pages.length, pages.length, 'Complete! Loading results...');
         
-        // Show results
-        displayResults(data);
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Display results
+        const storybookData = {
+            story_title: storyTitle,
+            total_pages: pages.length,
+            images: generatedPages
+        };
+        
+        displayResults(storybookData);
         
     } catch (error) {
-        console.error('Error:', error);
+        console.error('=== GENERATION ERROR ===', error);
         showError(error.message);
     } finally {
         generateBtn.disabled = false;
@@ -92,9 +139,13 @@ function updateProgress(current, total, message) {
     progressFill.style.width = `${percentage}%`;
     progressText.textContent = message;
     progressPages.textContent = `Page ${current} of ${total}`;
+    console.log(`Progress: ${percentage}% - ${message}`);
 }
 
 function displayResults(data) {
+    console.log('=== DISPLAYING RESULTS ===');
+    console.log('Data:', data);
+    
     showSection('results');
     
     // Set title
@@ -110,7 +161,11 @@ function displayResults(data) {
     });
     
     // Scroll to results
-    resultsSection.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+    
+    console.log('=== RESULTS DISPLAYED ===');
 }
 
 function createPageElement(pageData) {
@@ -125,41 +180,43 @@ function createPageElement(pageData) {
     pageNumber.textContent = pageData.page_number;
     
     pageHeader.appendChild(pageNumber);
+    pageDiv.appendChild(pageHeader);
     
     const pageText = document.createElement('p');
     pageText.className = 'page-text';
     pageText.textContent = pageData.page_text;
-    
-    pageDiv.appendChild(pageHeader);
     pageDiv.appendChild(pageText);
     
-    // Add image
-    if (pageData.image_filename !== 'error') {
+    // Add image or error
+    if (pageData.success !== false && pageData.image_filename) {
+        const imageUrl = `${API_BASE_URL}/images/${pageData.image_filename}`;
+        
         const img = document.createElement('img');
         img.className = 'page-image';
         img.alt = `Page ${pageData.page_number} illustration`;
-        img.src = `${API_BASE_URL}/images/${pageData.image_filename}`;
+        img.src = imageUrl;
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s';
         
-        // Add loading state
         img.onload = function() {
+            console.log('✅ Image loaded:', imageUrl);
             img.style.opacity = '1';
         };
         
         img.onerror = function() {
+            console.error('❌ Image failed:', imageUrl);
+            img.style.display = 'none';
             const errorDiv = document.createElement('div');
             errorDiv.className = 'image-error';
             errorDiv.textContent = '❌ Failed to load image';
             pageDiv.appendChild(errorDiv);
         };
         
-        img.style.opacity = '0';
-        img.style.transition = 'opacity 0.3s';
-        
         pageDiv.appendChild(img);
     } else {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'image-error';
-        errorDiv.textContent = `❌ ${pageData.image_path}`;
+        errorDiv.textContent = `❌ ${pageData.error || 'Generation failed'}`;
         pageDiv.appendChild(errorDiv);
     }
     
@@ -169,16 +226,16 @@ function createPageElement(pageData) {
 function showError(message) {
     showSection('error');
     errorMessage.textContent = message;
-    errorSection.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+        errorSection.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
 }
 
 function showSection(section) {
-    // Hide all sections
     progressSection.classList.add('hidden');
     resultsSection.classList.add('hidden');
     errorSection.classList.add('hidden');
     
-    // Show selected section
     if (section === 'progress') {
         progressSection.classList.remove('hidden');
     } else if (section === 'results') {
@@ -191,32 +248,12 @@ function showSection(section) {
 function clearForm() {
     storyTitleInput.value = '';
     storyTextArea.value = '';
-    storyTitleInput.focus();
 }
 
 function resetToForm() {
     showSection('none');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    storyTextArea.focus();
 }
 
-// ==================== SAMPLE STORY (FOR TESTING) ====================
-// Uncomment to pre-fill with sample story
-/*
-window.addEventListener('load', () => {
-    storyTitleInput.value = "The Magical Adventure";
-    storyTextArea.value = `Once upon a time, there was a brave little mouse named Pip who lived in a cozy hole.
-
-One day, Pip discovered a mysterious glowing acorn in the forest.
-
-The acorn led Pip on an amazing adventure through magical lands.
-
-Pip made many friends along the way, including a wise owl and a friendly fox.
-
-Together, they discovered the acorn was a key to a hidden treasure.
-
-The treasure was a beautiful garden where all animals could live in harmony.
-
-Pip became a hero, and everyone lived happily ever after.`;
-});
-*/
+console.log('=== SCRIPT LOADED ===');
+console.log('API:', API_BASE_URL);
