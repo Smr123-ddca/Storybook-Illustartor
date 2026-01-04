@@ -21,7 +21,7 @@ This project was built primarily as a **learning project** to explore FastAPI, f
 3. The backend:
    - Splits the story into pages (based on paragraphs or word count).
    - Generates an image prompt for each page.
-4. A free AI image generation API is used to create illustrations.
+4. A free AI image generation API(Pollination.ai) is used to create illustrations.
 5. Each page’s text and image URL are returned to the frontend.
 6. The frontend renders the story page by page like a storybook.
 
@@ -41,7 +41,8 @@ This project was built primarily as a **learning project** to explore FastAPI, f
 
 ## 📂 Project Structure
 
-Storybook-Illustartor/
+Storybook-Illustartor
+```
 │
 ├── backend/
 │   ├── main.py          # FastAPI backend logic
@@ -55,6 +56,7 @@ Storybook-Illustartor/
 │   └── script.js        # Frontend logic
 │
 └── README.md
+```
 
 ## 🚀 How to Run the Project Locally
 
@@ -115,7 +117,7 @@ http://localhost:3000
 
 ## ⚠️ Limitations
 
-* Uses a **free public AI image API**, so:
+* Uses a **free public AI image API(Pollination.ai)**, so:
 
   * Image quality may vary
   * Generation speed depends on network conditions
@@ -159,5 +161,4 @@ Feel free to open an issue or fork the repository.
 
 ✨ Happy storytelling ✨
 
-Just tell me what you need.
 ```
