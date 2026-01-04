@@ -1,149 +1,94 @@
-// ==================== CONFIGURATION ====================
-const API_BASE_URL = 'http://localhost:8000'; // Make sure backend is running here
+const API_URL = 'http://localhost:8000';
 
-// ==================== DOM ELEMENTS ====================
-const inputSection = document.getElementById('inputSection');
-const loadingSection = document.getElementById('loadingSection');
-const resultsSection = document.getElementById('resultsSection');
-
-const storyTitleInput = document.getElementById('storyTitle');
-const storyTextInput = document.getElementById('storyText');
-const generateBtn = document.getElementById('generateBtn');
-const resetBtn = document.getElementById('resetBtn');
-
-const progressFill = document.getElementById('progressFill');
-const progressText = document.getElementById('progressText');
-const resultTitleDisplay = document.getElementById('resultTitleDisplay');
-const storybookPages = document.getElementById('storybookPages');
-const errorToast = document.getElementById('errorToast');
-const errorMsg = document.getElementById('errorMsg');
-
-// ==================== EVENT LISTENERS ====================
-generateBtn.addEventListener('click', generateStory);
-resetBtn.addEventListener('click', resetApp);
-
-// ==================== MAIN LOGIC ====================
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('generateBtn').addEventListener('click', generateStory);
+    document.getElementById('restartBtn').addEventListener('click', () => location.reload());
+});
 
 async function generateStory() {
-    const title = storyTitleInput.value.trim() || "My Magical Story";
-    const text = storyTextInput.value.trim();
+    const titleInput = document.getElementById('storyTitle');
+    const textInput = document.getElementById('storyText');
+    
+    const title = titleInput.value.trim() || "My Story";
+    const text = textInput.value.trim();
 
     if (!text) {
-        showError("Please write a story first! The magic needs words to work.");
+        alert("The pages are empty! Please write a story first.");
         return;
     }
 
-    // 1. Switch UI to Loading
-    inputSection.classList.add('hidden');
-    resultsSection.classList.add('hidden');
-    loadingSection.classList.remove('hidden');
-    updateProgress(10, "Summoning the scribes...");
+    // UI Switch
+    document.getElementById('inputSection').classList.add('hidden');
+    document.getElementById('loadingSection').classList.remove('hidden');
+    updateProgress(10, "Preparing the canvas...");
 
     try {
-        // 2. Call the API
-        const response = await fetch(`${API_BASE_URL}/generate-storybook?title=${encodeURIComponent(title)}`, {
+        const response = await fetch(`${API_URL}/generate-storybook?title=${encodeURIComponent(title)}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ story_text: text })
         });
 
+        updateProgress(50, "Sketching characters...");
+
         if (!response.ok) {
-            throw new Error(`Magic failed: ${response.statusText}`);
+            const err = await response.json();
+            throw new Error(err.detail || "Server error");
         }
 
-        updateProgress(50, "Painting the pictures...");
         const data = await response.json();
-
-        // 3. Render Results
-        updateProgress(100, "Finishing touches...");
+        updateProgress(100, "Adding final details...");
         
-        // Small delay to let the user see the 100% bar
-        setTimeout(() => {
-            renderStorybook(data);
-        }, 800);
+        // Wait a bit to show 100% progress
+        setTimeout(() => displayResults(data), 800);
 
-    } catch (err) {
-        console.error(err);
-        showError("The magic fizzled out! Is the backend running? " + err.message);
-        inputSection.classList.remove('hidden');
-        loadingSection.classList.add('hidden');
+    } catch (error) {
+        console.error(error);
+        alert("Oh no! The magic spell failed: " + error.message);
+        location.reload();
     }
 }
 
-function renderStorybook(data) {
-    loadingSection.classList.add('hidden');
-    resultsSection.classList.remove('hidden');
+function displayResults(data) {
+    document.getElementById('loadingSection').classList.add('hidden');
+    const resultsSection = document.getElementById('resultsSection');
+    const container = document.getElementById('pagesContainer');
     
-    resultTitleDisplay.textContent = data.story_title;
-    storybookPages.innerHTML = ''; // Clear previous
+    document.getElementById('resultTitle').textContent = data.story_title;
+    container.innerHTML = "";
+    resultsSection.classList.remove('hidden');
 
-    data.images.forEach((pageData, index) => {
-        const pageCard = document.createElement('div');
-        pageCard.className = 'page-card';
-        
-        // Image Element with careful loading logic
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'page-image-container';
-        
-        const img = document.createElement('img');
-        img.className = 'story-image';
-        img.alt = `Illustration for page ${pageData.page_number}`;
-        
-        // FIX: Set opacity to 0 initially
-        img.style.opacity = '0';
-        
-        // FIX: Define onload BEFORE setting src
-        img.onload = () => {
-            img.style.opacity = '1';
-        };
-        
-        img.onerror = () => {
-            imgContainer.innerHTML = '<span style="color:#e74c3c">❌ Image vanished!</span>';
-        };
+    data.images.forEach(page => {
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'book-page';
 
-        // Construct URL
-        if(pageData.image_filename && pageData.image_filename !== 'error') {
-            img.src = `${API_BASE_URL}/images/${pageData.image_filename}`;
+        // Image Logic
+        let imgHtml = '';
+        if (page.image_filename && page.image_filename !== 'error') {
+            const imgSrc = `${API_URL}/images/${page.image_filename}?t=${Date.now()}`;
+            imgHtml = `<img src="${imgSrc}" class="page-img" alt="Page Illustration">`;
         } else {
-            imgContainer.innerHTML = '<span style="color:#e74c3c">⚠️ Could not paint this page.</span>';
+            imgHtml = `<div style="padding:4rem; text-align:center; background:#f0f0f0; color:#888;">Image missing</div>`;
         }
 
-        imgContainer.appendChild(img);
-
-        // Text Content
-        const content = document.createElement('div');
-        content.className = 'page-text-content';
-        content.innerHTML = `
-            <span class="page-number">Page ${pageData.page_number}</span>
-            <p>${pageData.page_text}</p>
+        // Layout: Image wrapper + Text content
+        pageDiv.innerHTML = `
+            <div class="page-img-wrapper">
+                ${imgHtml}
+            </div>
+            <div class="page-content">
+                <span class="page-num">Page ${page.page_number}</span>
+                <p class="page-text">${page.page_text}</p>
+            </div>
         `;
-
-        pageCard.appendChild(imgContainer);
-        pageCard.appendChild(content);
-        storybookPages.appendChild(pageCard);
+        container.appendChild(pageDiv);
     });
 
-    // Smooth scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function updateProgress(percent, message) {
-    progressFill.style.width = `${percent}%`;
-    progressText.textContent = message;
-}
-
-function showError(msg) {
-    errorMsg.textContent = msg;
-    errorToast.classList.remove('hidden');
-    setTimeout(() => {
-        errorToast.classList.add('hidden');
-    }, 5000);
-}
-
-function resetApp() {
-    resultsSection.classList.add('hidden');
-    inputSection.classList.remove('hidden');
-    storyTitleInput.value = '';
-    storyTextInput.value = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function updateProgress(percent, text) {
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('loadingText').textContent = text;
 }

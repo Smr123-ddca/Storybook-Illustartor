@@ -3,210 +3,402 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magical Storybook Illustrator ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <title>Whimsical Storybook Illustrator 🌸</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
-        /* ==================== WHIMSICAL STYLING ==================== */
+        /* ==================== COTTAGECORE THEME ==================== */
         :root {
-            --primary: #8e44ad;
-            --secondary: #f39c12;
-            --bg-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-            --parchment: #fffdf0;
+            --paper: #f9f7f1;
+            --sage-green: #8da399;
+            --deep-green: #2d4a3e;
+            --soft-pink: #f4d0c3;
+            --terracotta: #cd8571;
+            --text-main: #4a4a4a;
+            --shadow: rgba(45, 74, 62, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Patrick Hand', cursive;
-            background: var(--bg-gradient);
+            font-family: 'Quicksand', sans-serif;
+            background-color: #e6e2d6;
+            background-image: radial-gradient(#d3cec0 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main);
             min-height: 100vh;
-            color: #2c3e50;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* Floating Background Elements */
-        .magical-bg { position: fixed; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .cloud, .star { position: absolute; opacity: 0.6; animation: float 10s infinite ease-in-out; }
-        .cloud { font-size: 3rem; }
-        .star { font-size: 2rem; color: #fff; text-shadow: 0 0 10px gold; }
-        .c1 { top: 10%; left: 5%; animation-duration: 15s; }
-        .c2 { top: 20%; right: 10%; animation-duration: 18s; }
-        .s1 { top: 60%; left: 15%; animation: twinkle 3s infinite; }
-        .s2 { top: 15%; left: 50%; animation: twinkle 4s infinite; }
+        /* ==================== DECORATIVE BACKGROUND ==================== */
+        .decoration-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
 
-        @keyframes float { 50% { transform: translateY(-20px); } }
-        @keyframes twinkle { 50% { opacity: 1; transform: scale(1.2); } }
-
-        /* Layout */
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+        .flower {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            animation: float-gentle 8s infinite ease-in-out;
+        }
         
-        .hero { text-align: center; margin-bottom: 3rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
-        .hero h1 { font-family: 'Fredoka One', cursive; font-size: 3.5rem; letter-spacing: 2px; }
+        /* Floating elements positioned like Reference Image 1 */
+        .f1 { top: 10%; left: 5%; animation-delay: 0s; color: var(--sage-green); }
+        .f2 { top: 20%; right: 10%; animation-delay: 2s; color: var(--terracotta); }
+        .f3 { bottom: 15%; left: 15%; animation-delay: 4s; color: var(--soft-pink); font-size: 3rem; }
+        .f4 { top: 50%; right: 5%; animation-delay: 1s; color: var(--deep-green); }
 
-        /* Card Styling */
-        .card {
-            background: var(--parchment);
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border: 8px solid #fff;
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* ==================== LAYOUT ==================== */
+        .main-container {
+            max-width: 850px;
+            margin: 4rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 3rem;
             position: relative;
         }
 
-        .input-group { margin-bottom: 1.5rem; }
-        label { display: block; font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: bold; }
-        
-        input, textarea {
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            color: var(--deep-green);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--terracotta);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ==================== BOOK/CARD COMPONENT ==================== */
+        .storybook-card {
+            background: var(--paper);
+            border-radius: 12px;
+            box-shadow: 
+                0 20px 40px var(--shadow),
+                inset 0 0 60px rgba(189, 178, 153, 0.2); /* Inner paper shadow */
+            padding: 3rem;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* The "Wavy" Top Border (inspired by Reference 3) */
+        .storybook-card::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: 20px; right: 20px;
+            height: 20px;
+            background: var(--soft-pink);
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        .input-group { margin-bottom: 2rem; }
+
+        label {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--deep-green);
+            margin-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        /* Input styling to look like "Writing on Paper" */
+        input[type="text"], textarea {
             width: 100%;
             padding: 1rem;
-            border: 3px solid #e0d8f0;
-            border-radius: 12px;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            transition: 0.3s;
+            background: transparent;
+            border: none;
+            border-bottom: 2px dashed var(--sage-green);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            transition: all 0.3s;
+            line-height: 1.5;
+            background-image: linear-gradient(transparent 95%, rgba(141, 163, 153, 0.2) 95%);
+            background-size: 100% 2.5rem; /* Lined paper effect */
         }
-        input:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(142,68,173,0.2); }
 
-        /* Magic Button */
-        .magic-btn {
-            width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(45deg, #8e44ad, #c0392b);
-            color: white;
+        textarea {
+            resize: vertical;
+            min-height: 200px;
+            line-height: 2.5rem; /* Matches background lines */
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-bottom: 2px solid var(--terracotta);
+            background-color: rgba(255,255,255,0.4);
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn-draw {
+            background: var(--deep-green);
+            color: var(--paper);
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 1rem 3rem;
             border: none;
             border-radius: 50px;
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.5rem;
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 5px 15px rgba(142,68,173,0.4);
-        }
-        .magic-btn:hover { transform: translateY(-3px) scale(1.02); }
-        .magic-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
-
-        /* Loading State */
-        .crystal-ball {
-            width: 100px; height: 100px;
-            background: radial-gradient(circle at 30% 30%, #a9dce8, #74b9ff);
-            border-radius: 50%;
-            margin: 0 auto 2rem;
-            box-shadow: 0 0 30px #74b9ff;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
+            width: 100%;
+            margin-top: 1rem;
             position: relative;
-            animation: glow 2s infinite alternate;
-        }
-        @keyframes glow { from { box-shadow: 0 0 20px #74b9ff; } to { box-shadow: 0 0 40px #74b9ff, 0 0 10px white; } }
-
-        .progress-bar { width: 100%; height: 20px; background: #ddd; border-radius: 10px; overflow: hidden; margin-top: 1rem; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #f1c40f, #e67e22); width: 0%; transition: width 0.3s; }
-
-        /* Results */
-        .page-card {
-            background: white;
-            border-radius: 15px;
             overflow: hidden;
-            margin-bottom: 3rem;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-            animation: popIn 0.6s ease-out;
         }
-        @keyframes popIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .page-image { width: 100%; display: block; min-height: 200px; background: #f0f0f0; }
-        .page-text { padding: 2rem; font-size: 1.4rem; line-height: 1.6; text-align: center; border-top: 5px solid var(--secondary); }
-        .page-num { display: inline-block; background: var(--secondary); color: white; padding: 0.2rem 1rem; border-radius: 20px; margin-bottom: 1rem; }
+        .btn-draw::after {
+            content: '✨';
+            position: absolute;
+            right: 20px;
+            opacity: 0.5;
+        }
+
+        .btn-draw:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(45, 74, 62, 0.3);
+            background: var(--terracotta);
+        }
+
+        /* ==================== LOADING STATE ==================== */
+        .loading-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-icon {
+            font-size: 3rem;
+            animation: spin 3s infinite linear;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--sage-green),
+                var(--sage-green) 10px,
+                var(--deep-green) 10px,
+                var(--deep-green) 20px
+            );
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* ==================== RESULTS PAGE ==================== */
+        .book-page {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-radius: 4px;
+            /* "Torn paper" edge effect using clip-path could go here, simplified for reliability */
+            border: 1px solid #eee;
+        }
+
+        @media (min-width: 768px) {
+            .book-page {
+                grid-template-columns: 1fr 1fr; /* Image left, text right */
+                align-items: center;
+                padding: 3rem;
+            }
+            /* Alternate layout for variety like Reference 2 */
+            .book-page:nth-child(even) {
+                grid-template-columns: 1fr 1fr;
+                direction: rtl; /* Swaps image/text */
+            }
+            .book-page:nth-child(even) > * {
+                direction: ltr; /* Fix text direction */
+            }
+        }
+
+        .page-img-wrapper {
+            position: relative;
+            padding: 10px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: rotate(-1deg);
+        }
+
+        .book-page:nth-child(even) .page-img-wrapper {
+            transform: rotate(1deg);
+        }
+
+        .page-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 2px;
+        }
+
+        .page-content {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            text-align: left;
+        }
+
+        .page-num {
+            display: inline-block;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9rem;
+            color: var(--sage-green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--terracotta);
+            padding-bottom: 5px;
+        }
+
+        .page-text::first-letter {
+            font-size: 3.5rem;
+            float: left;
+            margin-right: 10px;
+            line-height: 0.8;
+            color: var(--terracotta);
+            font-family: 'Cormorant Garamond', serif;
+        }
 
         .hidden { display: none !important; }
+
     </style>
 </head>
 <body>
-    <div class="magical-bg">
-        <div class="cloud c1">☁️</div>
-        <div class="cloud c2">☁️</div>
-        <div class="star s1">✨</div>
-        <div class="star s2">✨</div>
+
+    <div class="decoration-container">
+        <div class="flower f1">❀</div>
+        <div class="flower f2">❋</div>
+        <div class="flower f3">🌸</div>
+        <div class="flower f4">🍃</div>
     </div>
 
-    <main class="container">
-        <header class="hero">
-            <h1>🧚 Storybook Illustrator</h1>
-            <p>Where your words become magic pictures!</p>
+    <main class="main-container">
+        
+        <header class="header-section">
+            <h1>Storybook Illustrator</h1>
+            <p class="subtitle">Weave your words into a visual tale</p>
         </header>
 
-        <section id="inputSection" class="card">
-            <div style="text-align: center; font-size: 3rem; margin-bottom: 1rem;">✒️</div>
+        <section id="inputSection" class="storybook-card">
             <div class="input-group">
-                <label>Story Title</label>
-                <input type="text" id="storyTitle" placeholder="The Magical Adventure...">
+                <label>The Title of your Tale</label>
+                <input type="text" id="storyTitle" placeholder="The Garden of Whispers...">
             </div>
+
             <div class="input-group">
-                <label>Your Story (Separate pages with blank lines)</label>
-                <textarea id="storyText" rows="8" placeholder="Once upon a time...&#10;&#10;Then they went to the forest..."></textarea>
+                <label>Once upon a time...</label>
+                <textarea id="storyText" placeholder="Write your story here.&#10;&#10;Leave a blank line between paragraphs to create new pages!&#10;&#10;Like this..."></textarea>
             </div>
-            <button id="generateBtn" onclick="generateStory()" class="magic-btn">✨ Create Magic Book</button>
+
+            <button id="generateBtn" onclick="generateStory()" class="btn-draw">
+                Illustrate My Story
+            </button>
         </section>
 
-        <section id="loadingSection" class="card hidden" style="text-align: center;">
-            <div class="crystal-ball"></div>
-            <h2>Conjuring Illustrations...</h2>
-            <p id="loadingText">Mixing potions...</p>
-            <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">(This might take 1-2 minutes. Please be patient!)</p>
+        <section id="loadingSection" class="storybook-card hidden">
+            <div class="loading-container">
+                <div class="loading-icon">🎨</div>
+                <h2 style="font-family: 'Cormorant Garamond'; color: var(--deep-green);">Painting your pages...</h2>
+                <p id="loadingText" style="color: var(--sage-green);">Mixing colors...</p>
+                <div class="progress-bar-bg">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+            </div>
         </section>
 
         <section id="resultsSection" class="hidden">
-            <h2 id="resultTitle" style="text-align: center; color: white; font-size: 3rem; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"></h2>
-            <div id="pagesContainer"></div>
-            <div style="text-align: center; margin-top: 2rem;">
-                <button onclick="location.reload()" class="magic-btn" style="width: auto; padding: 1rem 3rem;">🔄 Write Another Story</button>
+            <h2 id="resultTitle" style="text-align: center; font-family: 'Cormorant Garamond'; font-size: 3rem; margin-bottom: 3rem; color: var(--deep-green);"></h2>
+            
+            <div id="pagesContainer">
+                </div>
+
+            <div style="text-align: center; margin-top: 4rem;">
+                <button onclick="location.reload()" class="btn-draw" style="width: auto; background: var(--terracotta);">
+                    Start a New Story
+                </button>
             </div>
         </section>
+
     </main>
 
     <script>
         const API_URL = 'http://localhost:8000';
 
         async function generateStory() {
-            // 1. Get Input
             const title = document.getElementById('storyTitle').value.trim() || "My Story";
             const text = document.getElementById('storyText').value.trim();
 
             if (!text) {
-                alert("Please write a story first!");
+                alert("The pages are empty! Please write a story first.");
                 return;
             }
 
-            // 2. Show Loading
+            // UI Switch
             document.getElementById('inputSection').classList.add('hidden');
             document.getElementById('loadingSection').classList.remove('hidden');
-            updateProgress(10, "Waking up the artists...");
+            updateProgress(10, "Preparing the canvas...");
 
             try {
-                // 3. Send Request
-                console.log("Sending request to backend...");
-                
                 const response = await fetch(`${API_URL}/generate-storybook?title=${encodeURIComponent(title)}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ story_text: text })
                 });
 
-                updateProgress(50, "Painting the masterpieces...");
+                updateProgress(50, "Sketching characters...");
 
                 if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.detail || "Server error");
+                    const err = await response.json();
+                    throw new Error(err.detail || "Server error");
                 }
 
                 const data = await response.json();
-                console.log("Data received:", data);
-
-                // 4. Show Results
-                updateProgress(100, "Finishing touches...");
-                setTimeout(() => displayResults(data), 500);
+                updateProgress(100, "Adding final details...");
+                
+                setTimeout(() => displayResults(data), 800);
 
             } catch (error) {
                 console.error(error);
-                alert("❌ The Magic Failed!\n\nReason: " + error.message + "\n\nTip: Make sure the backend window is running and 'images' folder exists!");
-                location.reload(); // Reset to let them try again
+                alert("Oh no! The magic spell failed: " + error.message);
+                location.reload();
             }
         }
 
@@ -216,29 +408,30 @@
             const container = document.getElementById('pagesContainer');
             
             document.getElementById('resultTitle').textContent = data.story_title;
-            container.innerHTML = ""; // Clear old pages
+            container.innerHTML = "";
             resultsSection.classList.remove('hidden');
 
-            // Loop through pages
             data.images.forEach(page => {
                 const pageDiv = document.createElement('div');
-                pageDiv.className = 'page-card';
+                pageDiv.className = 'book-page';
 
-                // Image logic (Fixed opacity bug)
+                // Image Logic
                 let imgHtml = '';
                 if (page.image_filename && page.image_filename !== 'error') {
-                    // We use a timestamp to prevent caching old images with same name
-                    const imgSrc = `${API_URL}/images/${page.image_filename}?t=${new Date().getTime()}`;
-                    imgHtml = `<img src="${imgSrc}" class="page-image" alt="Story Illustration">`;
+                    const imgSrc = `${API_URL}/images/${page.image_filename}?t=${Date.now()}`;
+                    imgHtml = `<img src="${imgSrc}" class="page-img" alt="Page Illustration">`;
                 } else {
-                    imgHtml = `<div class="page-image" style="display:flex;align-items:center;justify-content:center;color:red;">Failed to load image</div>`;
+                    imgHtml = `<div style="padding:4rem; text-align:center; background:#f0f0f0; color:#888;">Image missing</div>`;
                 }
 
+                // Layout: Image wrapper + Text content
                 pageDiv.innerHTML = `
-                    ${imgHtml}
-                    <div class="page-text">
+                    <div class="page-img-wrapper">
+                        ${imgHtml}
+                    </div>
+                    <div class="page-content">
                         <span class="page-num">Page ${page.page_number}</span>
-                        <p>${page.page_text}</p>
+                        <p class="page-text">${page.page_text}</p>
                     </div>
                 `;
                 container.appendChild(pageDiv);
